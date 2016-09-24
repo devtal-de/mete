@@ -111,6 +111,11 @@ class UsersController < ApplicationController
       flash[:info] = "The drink you just bought has been set to 'available'."
     end
     @user.buy(@drink)
+    begin
+      $twitter.update("#{Time.now.getutc}: \nEs wurde konsumiert: #{@drink.name}")
+    rescue
+      # nothing to do :P
+    end
     flash[:success] = "You just bought a drink and your new balance is #{@user.balance}. Thank you."
     if (@user.balance < 0) then
       flash[:warning] = "Your balance is below zero. Remember to compensate as soon as possible."
